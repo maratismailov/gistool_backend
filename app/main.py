@@ -53,7 +53,7 @@ app.add_middleware(
 
 
 
-@app.get("/")
+@app.get("/gistool_backend/")
 def index():
     return 'index'
 
@@ -64,7 +64,7 @@ class Polygons(Base):
     name = Column(String)
     geom = Column(Geometry('POLYGON', management=True, srid=4326))
 
-@app.get("/save_object")
+@app.get("/gistool_backend/save_object")
 def save_object(data: str):
     listen(engine, 'connect', load_spatialite)
     data = json.loads(data)
@@ -84,7 +84,7 @@ def save_object(data: str):
     session.commit()
     conn.close()
 
-@app.get("/get_all_objects")
+@app.get("/gistool_backend/get_all_objects")
 def get_all_objects():
     listen(engine, 'connect', load_spatialite)
     conn = engine.connect()
