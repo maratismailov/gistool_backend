@@ -1,9 +1,12 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
+FROM python:3.9
 
-COPY requirements.txt /tmp
+WORKDIR /code
 
-WORKDIR /tmp
+COPY ./install.sh /code/install.sh
 
-RUN pip install -r requirements.txt
+RUN apt update && apt install -y libsqlite3-mod-spatialite && ./install.sh
 
-COPY ./app /app
+COPY ./app /code/app
+
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD . /code/env/bin/activate && cd /code/app && exec uvicorn main:app --host 0.0.0.0 --port 80
