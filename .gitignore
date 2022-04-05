@@ -2,3 +2,4 @@ env/
 __pycache__/
 setenv.sh
 app/map.mbtiles
+app/gistool.db
