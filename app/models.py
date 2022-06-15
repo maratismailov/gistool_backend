@@ -33,6 +33,13 @@ class Polygons(Base):
     name = Column(String)
     geom = Column(Geometry('POLYGON', management=True, srid=4326))
 
+class Gnss(Base):
+    __tablename__ = 'gnss_points'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    geom = Column(Geometry('POINT', management=True, srid=4326))
+    details = Column(String)
+
 def create_db():
     listen(engine, 'connect', load_spatialite)
     conn = engine.connect()
@@ -42,6 +49,7 @@ def create_db():
     # session = Session()
     try:
         Polygons.__table__.create(engine)
+        Gnss.__table__.create(engine)
     except:
         print('already exists')
     # polygon = Polygons(name='test2', geom='POLYGON((0 0,1 0,1 1,0 1,0 0))')
