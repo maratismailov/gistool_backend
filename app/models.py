@@ -11,11 +11,6 @@ engine = create_engine('sqlite:///gistool.db', echo=True)
 Base = declarative_base()
 
 
-# data = '''{"type":"Feature","properties":{"name":"sdfsfsf2"},"geometry":{"type":"Polygon","coordinates":[[[74.449196,42.866622],[74.449196,42.908394],[74.52507,42.908394],[74.52507,42.866622],[74.449196,42.866622]]],"crs":{"type":"name","properties":{"name":"EPSG:4326"}}}}'''
-# geom = func.GeomFromGeoJSON(data)
-
-
-
 def load_spatialite(dbapi_conn, connection_record):
     dbapi_conn.enable_load_extension(True)
     try:
@@ -36,6 +31,7 @@ class Polygons(Base):
 class Gnss(Base):
     __tablename__ = 'gnss_points'
     id = Column(Integer, primary_key=True)
+    project_name = Column(String)
     name = Column(String)
     geom = Column(Geometry('POINT', management=True, srid=4326))
     details = Column(String)
@@ -44,16 +40,10 @@ def create_db():
     listen(engine, 'connect', load_spatialite)
     conn = engine.connect()
     conn.execute(select([func.InitSpatialMetaData()]))
-    # Session = sessionmaker(bind=engine)
-    # Session.configure(bind=engine)
-    # session = Session()
     try:
         Polygons.__table__.create(engine)
         Gnss.__table__.create(engine)
     except:
         print('already exists')
-    # polygon = Polygons(name='test2', geom='POLYGON((0 0,1 0,1 1,0 1,0 0))')
-    # session.add(polygon)
-    # session.commit()
     conn.close()
 
