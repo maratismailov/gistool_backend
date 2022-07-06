@@ -175,6 +175,7 @@ def process_summary_file(file, project_name):
     session = Session()
     geom_text = ('POINT({}, {})'.format(lon, lat))
     geom = func.SetSRID(func.MakePoint(lon, lat), 4326)
+    geom_kyrg_06 = func.SetSRID(func.MakePoint(lon, lat), 7684)
     gnss = Gnss(project_name = project_name, name=name, details=details, geom=geom)
     print('teiime', func.GeomFromText(geom_text))
     session.add(gnss)
